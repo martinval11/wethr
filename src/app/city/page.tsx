@@ -1,8 +1,7 @@
 import { WeatherView } from '@/components/weatherView';
 
-const getWeather = async () => {
-  const url =
-    'https://weatherapi-com.p.rapidapi.com/forecast.json?q=London&days=3';
+const getWeather = async (city: string) => {
+  const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${city}&days=3`;
   const options = {
     method: 'GET',
     headers: {
@@ -20,8 +19,9 @@ const getWeather = async () => {
   }
 };
 
-export default async function Home() {
-  const weather = await getWeather();
+export default async function City({ searchParams }: any) {
+  const city = searchParams?.query || 'London';
+  const weather = await getWeather(city);
 
   return <WeatherView weather={weather} />;
 }
