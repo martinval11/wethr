@@ -28,7 +28,7 @@ export function WeatherView({ weather }: any) {
         </h2>
       </header>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 w-full">
         <Card className="flex flex-col items-center justify-center">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <img src={weather.current.condition.icon} className="w-16" />
@@ -98,6 +98,65 @@ export function WeatherView({ weather }: any) {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+      </section>
+
+      <section className="mt-4 mb-4 w-full">
+        <h2 className="text-xl leading-tight tracking-tighter mt-3 mb-4 md:text-2xl">
+          More details
+        </h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex flex-col items-center justify-center gap-2">
+                {weather.current.pressure_mb} hPa
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-center">
+                Pressure
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex flex-col items-center justify-center gap-2">
+                {weather.current.feelslike_c} °C
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-center">
+                Feels like
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex flex-col items-center justify-center gap-2">
+                {weather.forecast.forecastday[0].day.totalprecip_mm} mm
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-center">
+                Total Precipitation
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex flex-col items-center justify-center gap-2">
+                {weather.forecast.forecastday[0].day.avgvis_km} km
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-center">
+                Average Visibility
+              </CardDescription>
+            </CardContent>
+          </Card>
+        </div>
       </section>
     </main>
   );

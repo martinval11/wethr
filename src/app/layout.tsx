@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
+
 import { ThemeProvider } from '@/components/theme-provider';
+import { Nav } from '@/components/nav';
+import { Footer } from '@/components/footer';
 
 import './globals.css';
-import { Nav } from '@/components/nav';
 
 export const metadata: Metadata = {
   title: 'Weather Forecast | Wethr',
@@ -21,21 +23,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Nav />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Nav />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
