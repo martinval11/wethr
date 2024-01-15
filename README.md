@@ -1,7 +1,7 @@
 # Wethr
 Weather Forecast App made with [Next.js](https://nextjs.org/) and [WeatherAPI](https://rapidapi.com/weatherapi/api/weatherapi-com)
 
-![screenshot](https://github.com/martinval11/commandkey/blob/main/images/scr.png?raw=true)
+![screenshot](https://github.com/martinval11/wethr/blob/main/images/scr.png?raw=true)
 
 # Setup
 ```sh
