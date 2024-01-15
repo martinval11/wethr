@@ -13,5 +13,5 @@ bun install # Or npm install
 # Tech Stack
 - [Next.js](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Shadcn](https://shadcn.com/)
+- [Shadcn](https://ui.shadcn.com/)
 - [WeatherAPI](https://rapidapi.com/weatherapi/api/weatherapi-com)
