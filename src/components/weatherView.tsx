@@ -32,10 +32,10 @@ export function WeatherView({ weather }: any) {
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
         <Card className="flex flex-col items-center justify-center">
-          <CardHeader className="flex flex-col items-center justify-center gap-2">
+          <CardHeader className="flex flex-col items-center justify-center gap-0">
             <Image
               src={`https:${weather.current.condition.icon}`}
-              className="w-16"
+              className="w-10"
               alt="Weather Icon"
               width={64}
               height={64}
