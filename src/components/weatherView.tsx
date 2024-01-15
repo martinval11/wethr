@@ -16,6 +16,8 @@ import {
 
 import { BsThermometer, BsDroplet, BsWind } from 'react-icons/bs';
 
+import Image from 'next/image';
+
 export function WeatherView({ weather }: any) {
   return (
     <main className="p-2 mx-auto flex max-w-[1150px] flex-col items-center gap-2">
@@ -31,7 +33,13 @@ export function WeatherView({ weather }: any) {
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 w-full">
         <Card className="flex flex-col items-center justify-center">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
-            <img src={weather.current.condition.icon} className="w-16" />
+            <Image
+              src={`https:${weather.current.condition.icon}`}
+              className="w-16"
+              alt="Weather Icon"
+              width={64}
+              height={64}
+            />
             <CardTitle>{weather.current.temp_c}°C</CardTitle>
           </CardHeader>
           <CardContent>
@@ -86,7 +94,13 @@ export function WeatherView({ weather }: any) {
                   <Card className="flex flex-col items-center justify-center">
                     <CardContent className="flex flex-col items-center justify-center p-4">
                       <span>{hour.time.split(' ')[1]}</span>
-                      <img src={hour.condition.icon} className="w-16" />
+                      <Image
+                        src={`https:${hour.condition.icon}`}
+                        className="w-16"
+                        alt="Hour condition icon"
+                        width={64}
+                        height={64}
+                      />
 
                       <CardDescription>{hour.temp_c}°C</CardDescription>
                     </CardContent>
