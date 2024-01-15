@@ -10,6 +10,45 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Weather Forecast | Wethr',
   description: 'Weather Forecast',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: 'Wethr',
+    description: 'Weather Forecast',
+    url: 'https://wethr.vercel.app',
+    siteName: 'Wethr',
+    images: [
+      {
+        url: 'https://wethr.vercel.app/favicon.png',
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Wethr',
+    description: 'Weather Forecast',
+    creator: '@martinval11_',
+    images: ['https://wethr.vercel.app/favicon.png'],
+  },
 };
 
 export const fontSans = FontSans({

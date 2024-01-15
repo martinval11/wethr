@@ -20,17 +20,17 @@ import Image from 'next/image';
 
 export function WeatherView({ weather }: any) {
   return (
-    <main className="p-2 mx-auto flex max-w-[1150px] flex-col items-center gap-2">
-      <header className="flex flex-col items-center">
+    <main className="p-4 mx-auto flex max-w-[1150px] flex-col items-center gap-2">
+      <header className="flex flex-col items-center pt-6 pb-4">
         <h1 className="text-center text-3xl text-balance leading-tight mt-2 tracking-tighter md:text-6xl lg:leading-[1.1]">
           {weather.location.name}
         </h1>
-        <h2 className="text-center text-xl leading-tight tracking-tighter mt-3 mb-4 md:text-2xl">
+        <h2 className="text-center text-xl leading-tight tracking-tighter mt-3 mb-4 md:text-2xl opacity-75">
           {weather.location.country}
         </h2>
       </header>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 w-full">
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
         <Card className="flex flex-col items-center justify-center">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <Image
@@ -118,7 +118,7 @@ export function WeatherView({ weather }: any) {
         <h2 className="text-xl leading-tight tracking-tighter mt-3 mb-4 md:text-2xl">
           More details
         </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
           <Card>
             <CardHeader>
               <CardTitle className="flex flex-col items-center justify-center gap-2">

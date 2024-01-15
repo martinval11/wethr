@@ -20,6 +20,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card } from './ui/card';
 
+import Image from 'next/image';
+
 const SearchCityDialog = () => {
   const [openModal, setOpenModal] = useState(false);
   const [citiesServer, formAction] = useFormState(searchCity, {
@@ -82,7 +84,7 @@ const SearchCityDialog = () => {
                   <BsGeoAlt /> {city.name}
                 </b>
 
-                {city.country}
+                <span className="opacity-75">{city.country}</span>
               </Card>
             </Link>
           ))}
@@ -117,7 +119,11 @@ const GeoLocationButton = () => {
 export function Nav() {
   return (
     <nav className="flex items-center justify-between p-3 px-4">
-      <b>Wethr</b>
+      <div className="flex items-center gap-2">
+        <Image src="/favicon.png" alt="Wethr" width={32} height={32} />
+        <b className="text-xl font-bold hidden sm:block">Wethr</b>
+      </div>
+
       <div className="flex items-center gap-4">
         <GeoLocationButton />
         <SearchCityDialog />
