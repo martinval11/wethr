@@ -27,7 +27,7 @@ const SearchCityDialog = () => {
   const [citiesServer, formAction] = useFormState(searchCity, {
     results: [],
   });
-  const [cities, setCities]: any = useState(citiesServer);
+  const [cities, setCities]: any = useState([null]);
 
   const SubmitButton = () => {
     const { pending } = useFormStatus();
@@ -40,7 +40,12 @@ const SearchCityDialog = () => {
   };
 
   useEffect(() => {
+    console.log(cities)
     setCities(citiesServer);
+
+    if (citiesServer.error) {
+      alert(citiesServer.message);
+    }
   }, [citiesServer]);
 
   return (

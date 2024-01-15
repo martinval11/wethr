@@ -15,6 +15,7 @@ export const searchCity = async (_prevState: any, formData: FormData) => {
   try {
     const response = await fetch(url, options);
     const result = await response.json();
+
     return {
       results: result,
     };
@@ -23,7 +24,7 @@ export const searchCity = async (_prevState: any, formData: FormData) => {
 
     return {
       error: true,
-      message: 'Something went wrong or city not found',
+      message: 'Something went wrong',
     };
   }
 };

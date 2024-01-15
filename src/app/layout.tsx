@@ -28,6 +28,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  metadataBase: new URL('https://wethr.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Wethr',
     description: 'Weather Forecast',
