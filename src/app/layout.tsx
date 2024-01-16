@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
+  manifest: '/manifest.json',
   robots: {
     index: true,
     follow: true,
