@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   },
 };
 
-const NotFound = () => {
+export default function NotFound() {
   return (
-    <main className="p-8 mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
+    <main className="p-8 mx-auto h-screen flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
       <header className="flex flex-col items-center">
         <h1 className="text-center text-3xl text-balance leading-tight tracking-tighter md:text-6xl lg:leading-[1.1]">
           Page not found
@@ -26,6 +26,4 @@ const NotFound = () => {
       </header>
     </main>
   );
-};
-
-export default NotFound;
+}

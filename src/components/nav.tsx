@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { BsGeoAlt, BsSearch } from 'react-icons/bs';
+import { BsGeoAlt, BsHeart, BsSearch } from 'react-icons/bs';
 import { searchCity } from '@/actions/searchCity';
 import { useFormStatus, useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
@@ -21,6 +21,9 @@ import Link from 'next/link';
 import { Card } from './ui/card';
 
 import Image from 'next/image';
+import { getCookie } from '@/lib/getCookie';
+import { setCookie } from '@/lib/setCookie';
+import { Trash } from 'lucide-react';
 
 const SearchCityDialog = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -40,7 +43,6 @@ const SearchCityDialog = () => {
   };
 
   useEffect(() => {
-    console.log(cities)
     setCities(citiesServer);
 
     if (citiesServer.error) {
@@ -51,7 +53,11 @@ const SearchCityDialog = () => {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setOpenModal(true)}>
+        <Button
+          variant="outline"
+          title="Search Location"
+          onClick={() => setOpenModal(true)}
+        >
           <BsSearch />
         </Button>
       </DialogTrigger>
@@ -74,7 +80,7 @@ const SearchCityDialog = () => {
           <SubmitButton />
         </form>
 
-        <div id="results">
+        <div id="results" className="flex flex-col gap-2">
           {cities.results?.map((city: any) => (
             <Link
               href={`/city?query=${city.lat},${city.lon}`}
@@ -115,9 +121,86 @@ const GeoLocationButton = () => {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={getLatLng}>
+    <Button variant="outline" title="Locate me" onClick={getLatLng}>
       <BsGeoAlt />
     </Button>
+  );
+};
+
+const FavoriteLocationsButton = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const favoriteLocations = getCookie('favorites');
+  const favoriteLocationsArray = favoriteLocations
+    ? JSON.parse(favoriteLocations)
+    : [];
+
+  const [favLocations, setFavLocations] = useState(favoriteLocationsArray);
+
+  return (
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          title="Favorite Locations"
+          onClick={() => setOpenModal(true)}
+        >
+          <BsHeart />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Favorite Locations</DialogTitle>
+        </DialogHeader>
+
+        <div id="results" className="flex flex-col gap-2">
+          {favLocations.map((city: any) => (
+            <Link
+              href={`/city?query=${city.name}`}
+              key={city}
+              onClick={() => {
+                setOpenModal(false);
+              }}
+            >
+              <Card className="p-3 flex justify-between items-center">
+                <div>
+                  <b className="flex items-center gap-2">
+                    <BsGeoAlt /> {city.name}
+                  </b>
+
+                  <span className="opacity-75">{city.country}</span>
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  title="Remove from favorites"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setFavLocations(
+                      favLocations.filter(
+                        (location: any) => location.name !== city.name
+                      )
+                    );
+                    setCookie(
+                      'favorites',
+                      JSON.stringify(
+                        favLocations.filter(
+                          (location: any) => location.name !== city.name
+                        )
+                      ),
+                      999999
+                    );
+                  }}
+                >
+                  <Trash />
+                </Button>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -126,12 +209,15 @@ export function Nav() {
     <nav className="flex items-center justify-between p-3 px-4">
       <div className="flex items-center gap-2">
         <Image src="/favicon.png" alt="Wethr" width={32} height={32} />
-        <b className="text-xl font-bold hidden sm:block">Wethr</b>
+        <Link href="/" className="text-xl font-bold hidden sm:block">
+          Wethr
+        </Link>
       </div>
 
       <div className="flex items-center gap-4">
         <GeoLocationButton />
         <SearchCityDialog />
+        <FavoriteLocationsButton />
         <ModeToggle />
       </div>
     </nav>

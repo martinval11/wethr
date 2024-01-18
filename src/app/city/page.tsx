@@ -23,5 +23,5 @@ export default async function City({ searchParams }: any) {
   const city = searchParams?.query || 'London';
   const weather = await getWeather(city);
 
-  return <WeatherView weather={weather} />;
+  return <WeatherView weather={weather} defaultLocation={false} />;
 }

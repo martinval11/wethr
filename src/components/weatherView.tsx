@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -14,11 +16,38 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
+import { Button } from './ui/button';
+
 import { BsThermometer, BsDroplet, BsWind } from 'react-icons/bs';
+
+import { getCookie } from '@/lib/getCookie';
+import { setCookie } from '@/lib/setCookie';
 
 import Image from 'next/image';
 
-export function WeatherView({ weather }: any) {
+export function WeatherView({
+  weather,
+  defaultLocation,
+}: {
+  weather: any;
+  defaultLocation: boolean;
+}) {
+  const setFavorite = () => {
+    const favoriteList = [
+      ...JSON.parse(getCookie('favorites') || '[]'),
+      {
+        name: weather.location.name,
+        country: weather.location.country,
+      },
+    ];
+
+    setCookie('favorites', JSON.stringify(favoriteList), 999999);
+  };
+
+  const setDefaultLocation = () => {
+    setCookie('defaultLocation', weather.location.name, 999999);
+  };
+
   return (
     <main className="p-4 mx-auto flex max-w-[1150px] flex-col items-center gap-2">
       <header className="flex flex-col items-center pt-6 pb-4">
@@ -28,6 +57,17 @@ export function WeatherView({ weather }: any) {
         <h2 className="text-center text-xl leading-tight tracking-tighter mt-3 mb-4 md:text-2xl opacity-75">
           {weather.location.country}
         </h2>
+
+        {!defaultLocation ? (
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={setFavorite}>
+              Save as favorite
+            </Button>
+            <Button variant="secondary" onClick={setDefaultLocation}>
+              Set as default location
+            </Button>
+          </div>
+        ) : null}
       </header>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
