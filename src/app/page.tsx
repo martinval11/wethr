@@ -20,13 +20,14 @@ const getWeather = async () => {
 
     const result = await response.json();
     return result;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    throw new Error(error.message);
   }
 };
 
 export default async function Home() {
   const weather = await getWeather();
 
-  return <WeatherView weather={weather} defaultLocation />;
+  return <WeatherView weather={weather} />;
 }

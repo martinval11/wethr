@@ -84,7 +84,7 @@ const SearchCityDialog = () => {
           {cities.results?.map((city: any) => (
             <Link
               href={`/city?query=${city.lat},${city.lon}`}
-              key={city}
+              key={city.country + city.name}
               onClick={() => {
                 setOpenModal(false);
                 setCities([]);
@@ -137,13 +137,15 @@ const FavoriteLocationsButton = () => {
   const [favLocations, setFavLocations] = useState(favoriteLocationsArray);
 
   return (
-    <Dialog open={openModal} onOpenChange={setOpenModal}>
+    <Dialog
+      open={openModal}
+      onOpenChange={() => {
+        setFavLocations(favoriteLocationsArray);
+        setOpenModal(!openModal);
+      }}
+    >
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          title="Favorite Locations"
-          onClick={() => setOpenModal(true)}
-        >
+        <Button variant="outline" title="Favorite Locations" onClick={() => {}}>
           <BsHeart />
         </Button>
       </DialogTrigger>
@@ -153,7 +155,7 @@ const FavoriteLocationsButton = () => {
         </DialogHeader>
 
         <div id="results" className="flex flex-col gap-2">
-          {favLocations.map((city: any) => (
+          {favoriteLocationsArray.map((city: any) => (
             <Link
               href={`/city?query=${city.name}`}
               key={city}

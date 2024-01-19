@@ -16,23 +16,25 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
-import { Button } from './ui/button';
-
-import { BsThermometer, BsDroplet, BsWind } from 'react-icons/bs';
+import { Button } from '@/components/ui/button';
 
 import { getCookie } from '@/lib/getCookie';
 import { setCookie } from '@/lib/setCookie';
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { BsThermometer, BsDroplet, BsWind } from 'react-icons/bs';
+import { FavoriteLocation } from '@/app/types/favorites';
 
-export function WeatherView({
-  weather,
-  defaultLocation,
-}: {
-  weather: any;
-  defaultLocation: boolean;
-}) {
+export function WeatherView({ weather }: { weather: any }) {
+  const [defaultLocationState, setDefaultLocationState] = useState(false);
+  const [addedToFavorites, setAddedToFavorites] = useState(false);
+
+  const favorites = JSON.parse(getCookie('favorites') || '[]');
+  const [favoriteLocations, setFavoriteLocations] = useState(favorites);
+
   const setFavorite = () => {
+    setAddedToFavorites(true);
     const favoriteList = [
       ...JSON.parse(getCookie('favorites') || '[]'),
       {
@@ -41,12 +43,52 @@ export function WeatherView({
       },
     ];
 
+    // find if it exists.
+
+    const favorites = JSON.parse(getCookie('favorites') || '[]');
+    const favExist = favorites.find(
+      (favorite: FavoriteLocation) => favorite.name === weather.location.name
+    );
+
+    if (favExist) {
+      // remove it
+      setCookie(
+        'favorites',
+        JSON.stringify(
+          favorites.filter(
+            (favorite: FavoriteLocation) =>
+              favorite.name !== weather.location.name
+          )
+        ),
+        999999
+      );
+
+      setAddedToFavorites(false);
+      return;
+    }
+
     setCookie('favorites', JSON.stringify(favoriteList), 999999);
   };
 
   const setDefaultLocation = () => {
-    setCookie('defaultLocation', weather.location.name, 999999);
+    setCookie(
+      'defaultLocation',
+      `${weather.location.lat},${weather.location.lon}`,
+      999999
+    );
+    setDefaultLocationState(true);
   };
+
+  useEffect(() => {
+    const favExist = favoriteLocations.find(
+      (favorite: FavoriteLocation) => favorite.name === weather.location.name
+    );
+
+    if (favExist) {
+      setAddedToFavorites(true);
+      return;
+    }
+  }, []);
 
   return (
     <main className="p-4 mx-auto flex max-w-[1150px] flex-col items-center gap-2">
@@ -58,16 +100,22 @@ export function WeatherView({
           {weather.location.country}
         </h2>
 
-        {!defaultLocation ? (
-          <div className="flex gap-2">
-            <Button variant="secondary" onClick={setFavorite}>
-              Save as favorite
-            </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={setFavorite}>
+            {addedToFavorites ? (
+              <span>Remove from favorites</span>
+            ) : (
+              <span>Add to favorites</span>
+            )}
+          </Button>
+          {!defaultLocationState &&
+          getCookie('defaultLocation') !==
+            `${weather.location.lat},${weather.location.lon}` ? (
             <Button variant="secondary" onClick={setDefaultLocation}>
               Set as default location
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </header>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">

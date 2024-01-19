@@ -1,4 +1,4 @@
-type DayForecast = {
+interface DayForecast {
   time_epoch: number;
   time: string;
   temp_c: number;
@@ -37,7 +37,7 @@ type DayForecast = {
   gust_mph: number;
   gust_kph: number;
   uv: number;
-};
+}
 
 export type Weather = {
   location: {
