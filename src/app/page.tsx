@@ -26,8 +26,10 @@ const getWeather = async () => {
   }
 };
 
-export default async function Home() {
+const Home = async () => {
   const weather = await getWeather();
 
   return <WeatherView weather={weather} />;
 }
+
+export default Home;

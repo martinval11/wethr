@@ -1,4 +1,10 @@
+'use client';
+
 export const getCookie = (name: string) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   let nameEQ = name + '=';
   let ca = document.cookie.split(';');
 

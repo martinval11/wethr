@@ -24,14 +24,58 @@ import { setCookie } from '@/lib/setCookie';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { BsThermometer, BsDroplet, BsWind } from 'react-icons/bs';
-import { FavoriteLocation } from '@/app/types/favorites';
 
-export function WeatherView({ weather }: { weather: any }) {
+import { FavoriteLocation } from '@/app/types/favorites';
+import { Weather } from '@/app/types/weather';
+import { CardData } from './CardData';
+
+export function WeatherView({ weather }: { weather: Weather }) {
   const [defaultLocationState, setDefaultLocationState] = useState(false);
   const [addedToFavorites, setAddedToFavorites] = useState(false);
+  const [currentDefaultLocation, setCurrentDefaultLocation] = useState('');
 
-  const favorites = JSON.parse(getCookie('favorites') || '[]');
-  const [favoriteLocations, setFavoriteLocations] = useState(favorites);
+  const moreDetails = [
+    {
+      data: weather.current.pressure_mb,
+      unit: 'hPa',
+      description: 'Pressure',
+    },
+    {
+      data: weather.current.feelslike_c,
+      unit: '°C',
+      description: 'Feels like',
+    },
+    {
+      data: weather.forecast.forecastday[0].day.totalprecip_mm,
+      unit: 'mm',
+      description: 'Total Precipitation',
+    },
+    {
+      data: weather.forecast.forecastday[0].day.uv,
+      unit: 'UV',
+      description: 'UV Index',
+    },
+    {
+      data: weather.forecast.forecastday[0].day.avgvis_km,
+      unit: 'km',
+      description: 'Average Visibility',
+    },
+    {
+      data: weather.current.wind_degree,
+      unit: '°',
+      description: 'Wind Direction',
+    },
+    {
+      data: weather.current.last_updated,
+      unit: '',
+      description: 'Last time updated',
+    },
+    {
+      data: weather.forecast.forecastday[0].day.maxwind_kph,
+      unit: 'km/h',
+      description: 'Max wind',
+    }
+  ];
 
   const setFavorite = () => {
     setAddedToFavorites(true);
@@ -59,28 +103,28 @@ export function WeatherView({ weather }: { weather: any }) {
             (favorite: FavoriteLocation) =>
               favorite.name !== weather.location.name
           )
-        ),
-        999999
+        )
       );
 
       setAddedToFavorites(false);
       return;
     }
 
-    setCookie('favorites', JSON.stringify(favoriteList), 999999);
+    setCookie('favorites', JSON.stringify(favoriteList));
   };
 
   const setDefaultLocation = () => {
     setCookie(
       'defaultLocation',
-      `${weather.location.lat},${weather.location.lon}`,
-      999999
+      `${weather.location.lat},${weather.location.lon}`
     );
     setDefaultLocationState(true);
   };
 
+  // check if the city is in the favorites
   useEffect(() => {
-    const favExist = favoriteLocations.find(
+    const favorites = JSON.parse(getCookie('favorites') || '[]');
+    const favExist = favorites.find(
       (favorite: FavoriteLocation) => favorite.name === weather.location.name
     );
 
@@ -88,6 +132,28 @@ export function WeatherView({ weather }: { weather: any }) {
       setAddedToFavorites(true);
       return;
     }
+  }, [weather.location.name]);
+
+  // check if the city is the default location
+  useEffect(() => {
+    const defaultLocation = getCookie('defaultLocation');
+
+    if (defaultLocation) {
+      const [lat, lon] = defaultLocation.split(',');
+
+      if (
+        weather.location.lat === Number(lat) &&
+        weather.location.lon === Number(lon)
+      ) {
+        setDefaultLocationState(true);
+      }
+    }
+  }, [weather.location.lat, weather.location.lon]);
+
+  // set the current default location
+  useEffect(() => {
+    const defaultLocationCookie: any = getCookie('defaultLocation');
+    setCurrentDefaultLocation(defaultLocationCookie);
   }, []);
 
   return (
@@ -101,15 +167,18 @@ export function WeatherView({ weather }: { weather: any }) {
         </h2>
 
         <div className="flex gap-2">
-          <Button variant="secondary" onClick={setFavorite}>
-            {addedToFavorites ? (
-              <span>Remove from favorites</span>
-            ) : (
-              <span>Add to favorites</span>
-            )}
-          </Button>
+          {defaultLocationState === false && (
+            <Button variant="secondary" onClick={setFavorite}>
+              {addedToFavorites ? (
+                <span>Remove from favorites</span>
+              ) : (
+                <span>Add to favorites</span>
+              )}
+            </Button>
+          )}
+
           {!defaultLocationState &&
-          getCookie('defaultLocation') !==
+          currentDefaultLocation !==
             `${weather.location.lat},${weather.location.lon}` ? (
             <Button variant="secondary" onClick={setDefaultLocation}>
               Set as default location
@@ -207,57 +276,14 @@ export function WeatherView({ weather }: { weather: any }) {
           More details
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-col items-center justify-center gap-2">
-                {weather.current.pressure_mb} hPa
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-center">
-                Pressure
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-col items-center justify-center gap-2">
-                {weather.current.feelslike_c} °C
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-center">
-                Feels like
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-col items-center justify-center gap-2">
-                {weather.forecast.forecastday[0].day.totalprecip_mm} mm
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-center">
-                Total Precipitation
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-col items-center justify-center gap-2">
-                {weather.forecast.forecastday[0].day.avgvis_km} km
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-center">
-                Average Visibility
-              </CardDescription>
-            </CardContent>
-          </Card>
+        {moreDetails.map((detail, index) => (
+          <CardData
+            key={index}
+            data={detail.data}
+            unit={detail.unit}
+            description={detail.description}
+          />          
+        ))}
         </div>
       </section>
     </main>

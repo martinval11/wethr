@@ -3,12 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
-export default function Error({
+const Error = ({
   error,
 }: {
   error: (Error & { digest?: string }) | any;
   reset: () => void;
-}) {
+}) => {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -19,10 +19,12 @@ export default function Error({
         <h1 className="text-center text-3xl text-balance leading-tight tracking-tighter md:text-6xl lg:leading-[1.1] mb-2">
           Something went wrong
         </h1>
-        <p className='mb-3'>Did you try to reload the page?</p>
+        <p className="mb-3">Did you try to reload the page?</p>
 
         <Button onClick={() => window.location.reload()}>Reload</Button>
       </header>
     </main>
   );
-}
+};
+
+export default Error;
