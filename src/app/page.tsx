@@ -1,8 +1,10 @@
 import { WeatherView } from '@/components/weatherView';
+import { cookies } from 'next/headers';
 
 const getWeather = async () => {
-  const url =
-    'https://weatherapi-com.p.rapidapi.com/forecast.json?q=London&days=3';
+  const city = cookies().get('defaultLocation')?.value || 'London';
+
+  const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${city}&days=3`;
   const options = {
     method: 'GET',
     headers: {
@@ -13,15 +15,21 @@ const getWeather = async () => {
 
   try {
     const response = await fetch(url, options);
+
+    if (!response.ok) throw new Error('Error during request.');
+
     const result = await response.json();
     return result;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    throw new Error(error.message);
   }
 };
 
-export default async function Home() {
+const Home = async () => {
   const weather = await getWeather();
 
   return <WeatherView weather={weather} />;
 }
+
+export default Home;

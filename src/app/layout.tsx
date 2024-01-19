@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { Nav } from '@/components/nav';
+import { Nav } from '@/components/Nav/nav';
 import { Footer } from '@/components/footer';
 
 import './globals.css';
@@ -61,11 +61,7 @@ export const fontSans = FontSans({
   variable: '--font-sans',
 });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -83,4 +79,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

@@ -19,9 +19,14 @@ const getWeather = async (city: string) => {
   }
 };
 
-export default async function City({ searchParams }: any) {
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
+const City = async ({ searchParams }: { searchParams: { query: string } }) => {
   const city = searchParams?.query || 'London';
   const weather = await getWeather(city);
 
   return <WeatherView weather={weather} />;
-}
+};
+
+export default City;

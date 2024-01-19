@@ -1,8 +1,3 @@
-'use client';
-
-import { ModeToggle } from './mode-toggle';
-
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,17 +7,17 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
 import { BsGeoAlt, BsSearch } from 'react-icons/bs';
 import { searchCity } from '@/actions/searchCity';
+
 import { useFormStatus, useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Card } from './ui/card';
 
-import Image from 'next/image';
-
-const SearchCityDialog = () => {
+export const SearchCityButton = () => {
   const [openModal, setOpenModal] = useState(false);
   const [citiesServer, formAction] = useFormState(searchCity, {
     results: [],
@@ -40,7 +35,6 @@ const SearchCityDialog = () => {
   };
 
   useEffect(() => {
-    console.log(cities)
     setCities(citiesServer);
 
     if (citiesServer.error) {
@@ -51,7 +45,11 @@ const SearchCityDialog = () => {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setOpenModal(true)}>
+        <Button
+          variant="outline"
+          title="Search Location"
+          onClick={() => setOpenModal(true)}
+        >
           <BsSearch />
         </Button>
       </DialogTrigger>
@@ -74,11 +72,11 @@ const SearchCityDialog = () => {
           <SubmitButton />
         </form>
 
-        <div id="results">
+        <div id="results" className="flex flex-col gap-2">
           {cities.results?.map((city: any) => (
             <Link
               href={`/city?query=${city.lat},${city.lon}`}
-              key={city}
+              key={city.country + city.name}
               onClick={() => {
                 setOpenModal(false);
                 setCities([]);
@@ -98,42 +96,3 @@ const SearchCityDialog = () => {
     </Dialog>
   );
 };
-
-const GeoLocationButton = () => {
-  const router = useRouter();
-
-  const getLatLng = () => {
-    if ('geolocation' in navigator) {
-      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        const { latitude, longitude } = coords;
-        router.push(`/city?query=${latitude},${longitude}`);
-      });
-    } else {
-      alert('Sorry. Geolocation is not supported by your browser.');
-    }
-  };
-
-  return (
-    <Button variant="outline" size="sm" onClick={getLatLng}>
-      <BsGeoAlt />
-    </Button>
-  );
-};
-
-export function Nav() {
-  return (
-    <nav className="flex items-center justify-between p-3 px-4">
-      <div className="flex items-center gap-2">
-        <Image src="/favicon.png" alt="Wethr" width={32} height={32} />
-        <b className="text-xl font-bold hidden sm:block">Wethr</b>
-      </div>
-
-      <div className="flex items-center gap-4">
-        <GeoLocationButton />
-        <SearchCityDialog />
-        <ModeToggle />
-      </div>
-    </nav>
-  );
-}

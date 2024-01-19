@@ -14,12 +14,12 @@ const Error = ({
   }, [error]);
 
   return (
-    <main className="p-8 mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
+    <main className="p-8 mx-auto h-screen flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
       <header className="flex flex-col items-center">
-        <h1 className="text-center text-3xl text-balance leading-tight tracking-tighter md:text-6xl lg:leading-[1.1]">
+        <h1 className="text-center text-3xl text-balance leading-tight tracking-tighter md:text-6xl lg:leading-[1.1] mb-2">
           Something went wrong
         </h1>
-        <p>Did you try to reload the page?</p>
+        <p className="mb-3">Did you try to reload the page?</p>
 
         <Button onClick={() => window.location.reload()}>Reload</Button>
       </header>
