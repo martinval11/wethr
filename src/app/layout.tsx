@@ -4,6 +4,7 @@ import { Inter as FontSans } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Nav } from '@/components/Nav/nav';
 import { Footer } from '@/components/footer';
+import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
 
@@ -75,6 +76,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <Nav />
           {children}
           <Footer />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

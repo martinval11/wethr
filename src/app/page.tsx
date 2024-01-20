@@ -29,7 +29,7 @@ const getWeather = async () => {
 const Home = async () => {
   const weather = await getWeather();
 
-  return <WeatherView weather={weather} />;
+  return <WeatherView weather={weather} defaultLocation />;
 }
 
 export default Home;
