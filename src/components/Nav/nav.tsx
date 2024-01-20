@@ -8,7 +8,7 @@ import { FavoriteLocationsButton } from './FavoriteLocationsButton';
 import { SearchCityButton } from './SearchCityButton';
 import { GeoLocationButton } from './GeoLocationButton';
 
-export function Nav() {
+export const Nav = () => {
   return (
     <nav className="flex items-center justify-between p-3 px-4">
       <div className="flex items-center gap-2">

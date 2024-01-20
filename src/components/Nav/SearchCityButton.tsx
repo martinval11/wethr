@@ -5,17 +5,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 
-import { BsGeoAlt, BsSearch } from 'react-icons/bs';
 import { searchCity } from '@/actions/searchCity';
 
 import { useFormStatus, useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { MapPin, Search } from 'lucide-react';
 
 export const SearchCityButton = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -24,11 +33,13 @@ export const SearchCityButton = () => {
   });
   const [cities, setCities]: any = useState([null]);
 
+  const { toast } = useToast();
+
   const SubmitButton = () => {
     const { pending } = useFormStatus();
     return (
       <Button type="submit" size="sm" className="flex items-center gap-2 px-3">
-        <BsSearch />
+        <Search className="h-[1.2rem] w-[1.2rem]" />
         {pending ? 'Searching...' : 'Search'}
       </Button>
     );
@@ -38,20 +49,30 @@ export const SearchCityButton = () => {
     setCities(citiesServer);
 
     if (citiesServer.error) {
-      alert(citiesServer.message);
+      toast({
+        title: 'Error',
+        description: citiesServer.message,
+        variant: 'destructive',
+      });
     }
   }, [citiesServer]);
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          title="Search Location"
-          onClick={() => setOpenModal(true)}
-        >
-          <BsSearch />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+              onClick={() => setOpenModal(true)}
+            >
+              <Search className="h-[1.2rem] w-[1.2rem]" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Search a city</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -84,7 +105,7 @@ export const SearchCityButton = () => {
             >
               <Card className="p-3">
                 <b className="flex items-center gap-2">
-                  <BsGeoAlt /> {city.name}
+                  <MapPin className="h-[1.2rem] w-[1.2rem]" /> {city.name}
                 </b>
 
                 <span className="opacity-75">{city.country}</span>

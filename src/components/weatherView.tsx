@@ -29,7 +29,13 @@ import { FavoriteLocation } from '@/app/types/favorites';
 import { Weather } from '@/app/types/weather';
 import { CardData } from './CardData';
 
-export function WeatherView({ weather }: { weather: Weather }) {
+export const WeatherView = ({
+  weather,
+  defaultLocation,
+}: {
+  weather: Weather;
+  defaultLocation?: boolean;
+}) => {
   const [defaultLocationState, setDefaultLocationState] = useState(false);
   const [addedToFavorites, setAddedToFavorites] = useState(false);
   const [currentDefaultLocation, setCurrentDefaultLocation] = useState('');
@@ -74,7 +80,7 @@ export function WeatherView({ weather }: { weather: Weather }) {
       data: weather.forecast.forecastday[0].day.maxwind_kph,
       unit: 'km/h',
       description: 'Max wind',
-    }
+    },
   ];
 
   const setFavorite = () => {
@@ -166,25 +172,27 @@ export function WeatherView({ weather }: { weather: Weather }) {
           {weather.location.country}
         </h2>
 
-        <div className="flex gap-2">
-          {defaultLocationState === false && (
-            <Button variant="secondary" onClick={setFavorite}>
-              {addedToFavorites ? (
-                <span>Remove from favorites</span>
-              ) : (
-                <span>Add to favorites</span>
-              )}
-            </Button>
-          )}
+        {!defaultLocation && (
+          <div className="flex gap-2">
+            {defaultLocationState === false && (
+              <Button variant="secondary" onClick={setFavorite}>
+                {addedToFavorites ? (
+                  <span>Remove from favorites</span>
+                ) : (
+                  <span>Add to favorites</span>
+                )}
+              </Button>
+            )}
 
-          {!defaultLocationState &&
-          currentDefaultLocation !==
-            `${weather.location.lat},${weather.location.lon}` ? (
-            <Button variant="secondary" onClick={setDefaultLocation}>
-              Set as default location
-            </Button>
-          ) : null}
-        </div>
+            {!defaultLocationState &&
+            currentDefaultLocation !==
+              `${weather.location.lat},${weather.location.lon}` ? (
+              <Button variant="secondary" onClick={setDefaultLocation}>
+                Set as default location
+              </Button>
+            ) : null}
+          </div>
+        )}
       </header>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
@@ -276,14 +284,14 @@ export function WeatherView({ weather }: { weather: Weather }) {
           More details
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4 w-full">
-        {moreDetails.map((detail, index) => (
-          <CardData
-            key={index}
-            data={detail.data}
-            unit={detail.unit}
-            description={detail.description}
-          />          
-        ))}
+          {moreDetails.map((detail, index) => (
+            <CardData
+              key={index}
+              data={detail.data}
+              unit={detail.unit}
+              description={detail.description}
+            />
+          ))}
         </div>
       </section>
     </main>

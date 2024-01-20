@@ -1,4 +1,5 @@
 import { WeatherView } from '@/components/weatherView';
+import { cookies } from 'next/headers';
 
 const getWeather = async (city: string) => {
   const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${city}&days=3`;
@@ -26,7 +27,12 @@ const City = async ({ searchParams }: { searchParams: { query: string } }) => {
   const city = searchParams?.query || 'London';
   const weather = await getWeather(city);
 
-  return <WeatherView weather={weather} />;
+  const defaultLocationStored = cookies().get('defaultLocation')?.value;
+
+  if (city !== defaultLocationStored) {
+    return <WeatherView weather={weather} />;
+  }
+  return <WeatherView weather={weather} defaultLocation />;
 };
 
 export default City;
