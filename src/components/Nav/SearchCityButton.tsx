@@ -6,13 +6,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
@@ -25,6 +18,7 @@ import { useFormStatus, useFormState } from 'react-dom';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { MapPin, Search } from 'lucide-react';
+import { TooltipButton } from './TooltipButton';
 
 export const SearchCityButton = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -60,19 +54,12 @@ export const SearchCityButton = () => {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-              onClick={() => setOpenModal(true)}
-            >
-              <Search className="h-[1.2rem] w-[1.2rem]" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Search a city</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipButton
+          onClick={() => setOpenModal(true)}
+          content="Search a city"
+        >
+          <Search className="h-[1.2rem] w-[1.2rem]" />
+        </TooltipButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
