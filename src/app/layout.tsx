@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { Viewport } from 'next';
+
 import { Inter as FontSans } from 'next/font/google';
 
 import { ThemeProvider } from '@/components/theme-provider';
@@ -56,6 +58,10 @@ export const metadata: Metadata = {
     images: ['https://wethr.vercel.app/favicon.png'],
   },
 };
+
+export const viewport: Viewport = {
+  themeColor: '#09090B',
+}
 
 export const fontSans = FontSans({
   subsets: ['latin'],
